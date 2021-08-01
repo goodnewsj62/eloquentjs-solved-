@@ -1,0 +1,45 @@
+whats a closure?
+#python3
+A closure is a function that has reference to a locally scoped value
+defined within its enviroment.
+Too much grammer right? Lets go into it
+
+For you to understand a closure you hve to 
+understand what a nested fuction is, and what 
+local scope and global scope is
+
+function print_msg is nested in fuction do_something
+and can access the variable (non local variable) msg enclosed in its parent
+function do_something. simple right?
+
+
+to define a closure, instead of executing the function in the enclosing scope
+we return it like so. Warning: do not call the returned
+function with ()
+
+so the value passed in through square is not fogotten even after program excution
+has passed that line.
+
+to be sure even if we re-assign square a new value say 1 squared one still has its value
+so good to be true right?
+
+
+all functions has a closure attribute in python that returns a tuple of cell
+object if the fuction is really a closure.
+we can also access the cell content(stored variables) like so.
+sweet right?
+
+
+we cant just stop there right now!
+when to use closures?
+i would use closures in place of a one method class
+with very few variables. This is because a closure remembers its
+values remember. so i could literally make diffrent instances using
+this technique like so.
+
+
+another use of closure is to provide abstarction of data
+
+lastly closure is not just a python thing.
+hit the follow button, smash the like and place your fingers on the
+retweet button. Thanks.  
