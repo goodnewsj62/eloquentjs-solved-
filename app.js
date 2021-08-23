@@ -234,6 +234,9 @@ console.log(nth(1,linkedList));
 console.log(nthLoop(1,linkedList));
 
 
+
+
+
 function deepEqual(value1,value2){
     
     if(value1 === value2) return true;
@@ -254,3 +257,193 @@ function deepEqual(value1,value2){
 
 console.log(deepEqual({"q":1},{"a":1}));
 
+//higer order functions
+const arrayOfArray = [[1,2],[1,2],[1,2,3]]
+
+const newArray = arrayOfArray.reduce((x,y)=> x.concat(y));
+
+console.log(newArray);
+
+
+// value, test function, update function and a body function
+
+function customFor(val,test,update,body){
+    let value = val;
+    let loopval = 1;
+    while (test(loopval)){
+        value = body(val,value);
+        console.log(value);
+        loopval = update(loopval);
+    }
+    return value;
+}
+
+let lresult = customFor(5, x => x<10, x=> x + 1, (x,y) => x*y)
+
+console.log(lresult);
+
+function customEvery(narry,func){
+    for(let each of narry){
+        if(!func(each)){
+            return false;
+        }
+    }
+    return true;
+}
+
+
+function customEverySome(narry,func){
+    result = narry.some(x=>!func(x));
+    return !result;
+
+}
+
+console.log(customEvery([1,2,3,4], x=> x == 0));
+console.log(customEverySome([1,2,3,4], x=> x == 0));
+
+x= Symbol("cor");
+y = Symbol("cor");
+
+
+// class Vec{
+//     constructor (x,y){
+//         this.x = x;
+//         this.y = y;
+//     }
+    
+//     get length(){
+//         const squrdX = Math.pow(this.x,2);
+//         const squrdY = Math.pow(this.y,2);
+//         return Math.sqrt((squrdX+squrdY));
+//     }
+//     minus(vector){
+//         if(!(vector instanceof Vec)) throw `${vector} must be an instance of Vec class`;  
+//         const negvectorX =  -1 * vector.x;
+//         const negvectorY = -1 * vector.y;
+
+//         return `{${this.x + negvectorX}, ${this.y + negvectorY}}` 
+//     }
+//     plus(vector){
+//         if(!(vector instanceof Vec)) throw `${vector} must be an instance of Vec class`;
+//         return `{${this.x + vector.x}, ${this.y + vector.y}}` 
+//     }
+// }
+
+// let vector1 = new Vec(3,2);
+// console.log(vector1.length);
+// console.log(vector1.minus(new Vec(3,2)));
+// console.log(vector1.plus(new Vec(3,2)));
+// console.log(vector1.minus(3));
+
+
+class Group{
+    constructor(){
+        this.group = [];
+        this.length = 0;
+    }
+
+    add(value){
+            if (!this.has(value)) {
+                this.group.push(value);
+                this.length += 1;
+            };
+    }
+
+    has(value){
+        const valIndex = this.group.indexOf(value); 
+        return  this.group[valIndex] ===  value;
+    }
+
+    delete(value){
+        const valIndex = this.group.indexOf(value)
+        if(this.has(value)) this.group.splice(0,valIndex);
+    }
+
+    get(){
+        return this.group;
+    }
+
+    valueOf(index){
+        if( index < this.length) return this.group[index];
+    }
+    length(){
+        return this.length;
+    }
+}
+
+
+const group = new Group();
+group.add(1);
+group.add(2);
+group.add(3);
+group.add(1);
+
+console.log(group);
+
+class GroupIter{
+    constructor(object){
+        this.objectLength = object.length;
+        this.currentIndex = 0;
+        this.object = object;
+    }
+
+    next(){
+        if(this.currentIndex < this.objectLength){
+            let value = this.object.valueOf(this.currentIndex)
+            this.currentIndex += 1;
+            return {value , done: false};
+        }
+        else {
+            return {done:true};
+        }
+
+    }
+}
+
+Group.prototype[Symbol.iterator] = function(){
+    return new GroupIter(this);
+}
+
+for(let n of group){
+    console.log(n)
+}
+
+
+class Vec{
+    constructor (x,y){
+        this.x = x;
+        this.y = y;
+    }
+    
+    get length(){
+        const squrdX = Math.pow(this.x,2);
+        const squrdY = Math.pow(this.y,2);
+        return Math.sqrt((squrdX+squrdY));
+    }
+    minus(vector){
+      	//checks if the vector arg is an instance of class Vec
+        if(!(vector instanceof Vec)) throw `${vector} must be an instance of Vec class`;  
+        
+      	const negVectorX =  -1 * vector.x;
+        const negVectorY = -1 * vector.y;
+      	const xSum = this.x + negVectorX;
+      	const ySum = this.y + negVectorY;
+
+        return new Vec(xSum,ySum); 
+    }
+    plus(vector){
+        if(!(vector instanceof Vec)) throw `${vector} must be an instance of Vec class`;
+        
+      	return new Vec((this.x + vector.x),(this.y + vector.y));
+    }
+  
+    get str(){
+      return `{${this.x + negvectorX}, ${this.y + negvectorY}}`
+    }
+}
+
+let vector1 = new Vec(3,2);
+console.log(vector1.length);
+console.log(vector1.minus(new Vec(3,2)));
+console.log(vector1.plus(new Vec(3,2)));
+console.log(vector1.minus(3));
