@@ -446,4 +446,111 @@ let vector1 = new Vec(3,2);
 console.log(vector1.length);
 console.log(vector1.minus(new Vec(3,2)));
 console.log(vector1.plus(new Vec(3,2)));
-console.log(vector1.minus(3));
+// console.log(vector1.minus(3));
+
+class MultiplicationUnitError extends Error{}
+
+function premativeMultiply(){
+    const randomNumber = Math.floor(Math.random() * 10);
+    if (randomNumber <= 1){
+        return randomNumber * 3;
+    }
+    throw new MultiplicationUnitError("Oops multiplication error");
+}
+
+function premativeWrapper(){
+    for(;;){
+        try{
+            return premativeMultiply();
+        }
+        catch(e){
+            if(e instanceof MultiplicationUnitError){
+                console.log("Oops multiplication error");
+            }else{
+                throw e;
+            }
+        }
+    }
+}
+
+
+console.log(premativeWrapper());
+
+
+const box = {
+    locked:true,
+    unlock(){this.locked = false},
+    lock(){this.locked = true},
+    _content: [],
+    get content(){
+        if(this.locked) throw new Error("oops box is locked");
+        return this._content;
+    }
+}
+
+function withBoxUnlocked(func){
+    box.unlock();
+    try{
+        func();
+        box.lock();
+    }catch(e){
+        box.lock();
+        throw e;
+    }
+}
+
+
+
+let word = "you have a car that pop out love which is a ferrari";
+
+console.log(/ca[tr]/.test(word));
+console.log(/[pr]op/.test(word));
+console.log(/ferr[etyari]/.test(word));
+
+word = "whatever .,: that makes me curious"
+console.log(/ious$/.test(word));
+console.log(/\s\.,:|;/.test(word));
+word = ""
+console.log(/.{6,}/.test(word));
+
+//RegEx eloquentjs book exercise
+/* solu1:
+    i matched those without alphabet before and after quote took the charaters in between and 
+    place them in the middle of double quote
+    this worked but did'nt give me what i wanted for all test cases
+*/
+let quoteReplace = "she said 'i love you' and she aren't joking 'come over' "
+
+quoteReplace = quoteReplace.replace(/[^a-z]'(.+?)'[^a-z]/g," \"$1\" ");
+console.log(quoteReplace);
+
+quoteReplace = "she said 'i love you' and she aren't joking 'come over' she said to my place. trust me i wouldn't waste time 'testing it'";
+
+/* solu2:
+    i looked for cases where there's one or more alphabet then a single quote
+    then one or two alphabet and replaced single quote to caret ^.
+    assigned the result to a new binding, then i looked for all other single quotes
+    and replace them with doble quote. i then replace the caret ^ with single quote
+    as i did first.
+
+    from aren't to aren^t - > aren't 
+*/
+let apostrophe=  quoteReplace.replace(/\s([a-z]+?)'([a-z]{1,2})\s/g, ' $1^$2 ');
+quoteReplace = apostrophe.replace(/'/g,'"');
+quoteReplace = quoteReplace.replace(/\s([a-z]+?)\^([a-z]{1,2})\s/g, " $1'$2 ");
+console.log(quoteReplace);
+
+let jsNumber = "1e-10"
+console.log(/(-|\+)?\.?\d+\.?(e|E)?-?[0-9]+?/.test(jsNumber));
+
+let timefunc = (a) =>{
+    setTimeout(()=> console.log("ding!"),3000);
+    return a
+} 
+
+
+let fifteen = new Promise((_,reect) => {
+    reect(13);
+});
+fifteen.then(value => console.log(value));
+fifteen.catch(value => console.log("me"+ value));
